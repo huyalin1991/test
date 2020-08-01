@@ -1,0 +1,135 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "30.0.0"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+
+        //buildConfigField
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "APP_DEBUG", "false"
+        }
+        releaseTest {
+            minifyEnabled false
+            buildConfigField "boolean", "APP_DEBUG", "true"
+        }
+        debug {
+            minifyEnabled false
+            buildConfigField "boolean", "APP_DEBUG", "true"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.getName())
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    // Common
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "com.android.support.constraint:constraint-layout:$constraint_layout"
+    api "com.android.support:support-v4:$support_version"
+    api "com.android.support:appcompat-v7:$support_version"
+    api "com.android.support:support-v13:$support_version"
+    api "com.android.support:exifinterface:$support_version"
+    api "com.android.support:recyclerview-v7:$support_version"
+    api "com.android.support:design:$support_version"
+    api "com.android.support:multidex:$multidex"
+    api "com.android.support:support-annotations:$support_version"
+    api "org.jetbrains.anko:anko-common:$anko_version"
+    api "org.jetbrains.anko:anko-support-v4:$anko_version"
+
+    // Network
+    implementation "com.squareup.okhttp3:okhttp:$okhttp"
+    implementation "com.yunxiao.okhttp3:cookiemanager:$okhttp3_cookiemanager"
+    implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+    api "com.yunxiao:network:$net"
+
+    // RxTools
+    api "io.reactivex.rxjava2:rxjava:$rxjava"
+    api "io.reactivex.rxjava2:rxkotlin:$rxkotlin"
+    api "io.reactivex.rxjava2:rxandroid:$rxandroid"
+    implementation "com.jakewharton.rxrelay2:rxrelay:$rxrelay"
+
+    // Yx
+    api "com.yunxiao:base:$base"
+    api("com.yunxiao:appvm:$appvm")
+    api "com.yunxiao:yxdnaui:$dnaui"
+    implementation "com.yunxiao:yxsp:$sp"
+    api "com.yunxiao:permission:$permission"
+
+    // ARouter
+    api "com.alibaba:arouter-api:$arouter_api"
+    kapt "com.alibaba:arouter-compiler:$arouter_compiler"
+
+    // Injection
+    api "com.github.salomonbrys.kodein:kodein-conf:$kodein"
+    api "com.github.salomonbrys.kodein:kodein:$kodein"
+
+    // Picture
+    api "com.yunxiao:glide:$glide"
+    api "com.yunxiao:glide-fudao:$glide_fudao"
+    api "com.github.chrisbanes:PhotoView:$photo_view"
+    api "com.contrarywind:Android-PickerView:$picker_view"
+
+    // Bugly
+    api "com.tencent.bugly:crashreport:$crash_report"
+    api "com.tencent.bugly:nativecrashreport:$native_crash_report"
+
+    // Tools
+    api "com.google.code.gson:gson:$gson"
+    api "com.github.xiaohaibin:XBanner:$x_banner"
+    api "com.zxy.android:tiny:$tiny"
+    api "com.jakewharton.timber:timber:$timber"
+
+    //kit
+    debugApi('com.yunxiao:kit:1.0.8') {
+        exclude group: "com.android.support"
+        exclude group: 'com.yunxiao', module: 'ui'
+    }
+    releaseTestApi('com.yunxiao:kit:1.0.8') {
+        exclude group: "com.android.support"
+        exclude group: 'com.yunxiao', module: 'ui'
+    }
+    //正式环境使用kit-no-op
+    releaseApi('com.yunxiao:kit-no-op:1.0.4') {
+        exclude group: "com.android.support"
+        exclude group: 'com.yunxiao', module: 'ui'
+    }
+
+    // Other
+    api "com.yunxiao.umeng:umeng-social:$umeng_social" //友盟
+    api "com.yunxiao:kefu:$kefu"
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
